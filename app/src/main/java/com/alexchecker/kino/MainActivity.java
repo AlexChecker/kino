@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TopRated top = new TopRated();
+
         BottomNavigationView bottom = findViewById(R.id.bottomNavigationView);
         setFrag(new Waitiing());
         bottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                         setFrag(new Waitiing());
                         return true;
                     case R.id.top_rated:
-                        setFrag(new TopRated());
+                        setFrag(top);
                         return true;
 
                 }

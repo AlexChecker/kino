@@ -23,7 +23,7 @@ public class TopHundred {
         this.pagesCount = pagesCount;
     }
 
-    public List<Film> getFilms() {
+    public ArrayList<Film> getFilms() {
         return films;
     }
 

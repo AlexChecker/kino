@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alexchecker.kino.API.Film;
+import com.alexchecker.kino.API.NetworkImage;
 import com.alexchecker.kino.R;
 
 import java.io.IOException;
@@ -25,6 +27,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHolder> {
     private ArrayList<Film> films;
@@ -40,23 +43,20 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHo
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.top_waiting_element, parent,false);
         return new ViewHolder(view);
     }
-    public Drawable drawableFromUrl(String url) {
+    private Drawable loadImageFromNetwork(String imageUrl) {
+        Drawable drawable = null;
         try {
-
-
-            Bitmap x;
-
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.connect();
-            InputStream input = connection.getInputStream();
-
-            x = BitmapFactory.decodeStream(input);
-            return new BitmapDrawable(Resources.getSystem(), x);
+            drawable = Drawable.createFromStream(
+                    new URL(imageUrl).openStream(), "image.jpg");
+        } catch (IOException e) {
+            Log.d("test", e.getMessage());
         }
-        catch (IOException e)
-        {
-            return ResourcesCompat.getDrawable(Resources.getSystem(),R.drawable.image_not_found,null);
+        if (drawable == null) {
+            Log.d("test", "null drawable");
+        } else {
+            Log.d("test", "not null drawable");
         }
+        return drawable;
     }
 
     @Override
@@ -64,7 +64,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHo
         holder.getFilmName().setText(films.get(position).getNameRu());
         holder.getRating().setText(films.get(position).getRating());
         holder.getDate().setText(films.get(position).getYear());
-        holder.getPoster().setImageDrawable(drawableFromUrl(films.get(position).getPosterUrlPreview()));
+        NetworkImage i =new NetworkImage();
+        i.execute(films.get(position).getPosterUrl());
+        try {
+            holder.getPoster().setImageDrawable(i.get());
+        } catch (ExecutionException e) {
+        } catch (InterruptedException e) {
+        }
+
 
     }
 
