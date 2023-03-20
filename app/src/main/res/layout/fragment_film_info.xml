@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".FilmInfo">
+
+    <ImageView
+        android:id="@+id/FilmImage"
+        android:layout_width="360px"
+        android:layout_height="514px"
+        android:src="@drawable/image_not_found"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/FilmName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Нет данных"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/FilmImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/FilmRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Нет данных о рейтинге"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/FilmImage"
+        app:layout_constraintTop_toBottomOf="@+id/FilmName" />
+
+    <TextView
+        android:id="@+id/FilmDateInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Нет даты"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/FilmImage"
+        app:layout_constraintTop_toBottomOf="@+id/FilmRating" />
+
+    <TextView
+        android:id="@+id/FilmDescription"
+        android:layout_width="match_parent"
+        android:layout_height="480dp"
+        android:text="Нет описания"
+        android:textColor="@color/white"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

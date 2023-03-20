@@ -13,13 +13,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alexchecker.kino.API.Film;
 import com.alexchecker.kino.API.NetworkImage;
+import com.alexchecker.kino.FilmInfo;
+import com.alexchecker.kino.MainActivity;
 import com.alexchecker.kino.R;
 
 import java.io.IOException;
@@ -31,10 +36,12 @@ import java.util.concurrent.ExecutionException;
 
 public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHolder> {
     private ArrayList<Film> films;
+    private FragmentManager fragManager;
 
-    public TopRatedAdapter(ArrayList<Film> films)
+    public TopRatedAdapter(ArrayList<Film> films, FragmentManager frag)
     {
         this.films=films;
+        fragManager = frag;
     }
 
     @NonNull
@@ -45,6 +52,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHo
     }
     private Drawable loadImageFromNetwork(String imageUrl) {
         Drawable drawable = null;
+
         try {
             drawable = Drawable.createFromStream(
                     new URL(imageUrl).openStream(), "image.jpg");
@@ -64,6 +72,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHo
         holder.getFilmName().setText(films.get(position).getNameRu());
         holder.getRating().setText(films.get(position).getRating());
         holder.getDate().setText(films.get(position).getYear());
+        holder.filmID = films.get(position).getFilmId();
+        holder.frag = fragManager;
         NetworkImage i =new NetworkImage();
         i.execute(films.get(position).getPosterUrl());
         try {
@@ -80,11 +90,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHo
         return films.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final TextView filmName;
         private final TextView rating;
         private final TextView date;
         private final ImageView poster;
+
+        public FragmentManager frag;
+        public int filmID;
         public ViewHolder(View view)
         {
             super(view);
@@ -93,6 +106,16 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.ViewHo
             rating=view.findViewById(R.id.filmRating);
             date=view.findViewById(R.id.filmDate);
             poster=view.findViewById(R.id.film_poster);
+            view.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v)
+        {
+            FilmInfo f = new FilmInfo();
+            f.id = filmID;
+            frag.beginTransaction().replace(R.id.fragment_space,f,null).commit();
         }
 
         public TextView getFilmName()

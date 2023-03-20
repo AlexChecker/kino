@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TopRated top = new TopRated();
+        top.frag = getSupportFragmentManager();
 
         BottomNavigationView bottom = findViewById(R.id.bottomNavigationView);
         setFrag(new Waitiing());

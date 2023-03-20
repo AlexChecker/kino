@@ -4,12 +4,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.alexchecker.kino.API.ApiInterface;
@@ -27,6 +29,8 @@ import retrofit2.Response;
 
 public class TopRated extends Fragment {
 
+    public FragmentManager frag;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class TopRated extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ProgressBar pb = view.findViewById(R.id.pb);
         RecyclerView top= view.findViewById(R.id.top_rated);
 
         ApiInterface interfac = RequestBuilder.buildRequest().create(ApiInterface.class);
@@ -59,9 +63,9 @@ public class TopRated extends Fragment {
                     top.setLayoutManager(new LinearLayoutManager(getContext()));
                     top.setHasFixedSize(true);
                     ArrayList<Film> films = response.body().getFilms();
-                    TopRatedAdapter adp = new TopRatedAdapter(films);
+                    TopRatedAdapter adp = new TopRatedAdapter(films,frag);
                     top.setAdapter(adp);
-
+                    pb.setVisibility(View.GONE);
                 }
                 else
                 {
